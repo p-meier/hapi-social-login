@@ -23,8 +23,8 @@ server.register([require('hapi-auth-cookie'), require('bell')], function(err) {
   server.auth.strategy('twitter', 'bell', {
     provider: 'twitter',
     password: 'secret_cookie_encryption_password', //Use something more secure in production
-    clientId: 'Here goes the ClientId',
-    clientSecret: 'Here goes the ClientSecret',
+    clientId: 'Here goes the twitter Consumer Key',
+    clientSecret: 'Here goes the twitter Consumer Secret',
     isSecure: false //Should be set to true (which is the default) in production
   });
 
@@ -42,7 +42,7 @@ server.register([require('hapi-auth-cookie'), require('bell')], function(err) {
 
         //Just store the third party credentials in the session as an example. You could do something
         //more useful here - like loading or setting up an account (social signup).
-        request.auth.session.set(request.auth.credentials);
+        request.cookieAuth.set(request.auth.credentials);
 
         return reply.redirect('/');
       }
