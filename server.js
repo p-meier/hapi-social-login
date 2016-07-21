@@ -40,9 +40,15 @@ server.register([require('hapi-auth-cookie'), require('bell')], function(err) {
           return reply(Boom.unauthorized('Authentication failed: ' + request.auth.error.message));
         }
 
-        //Just store the third party credentials in the session as an example. You could do something
+        //Just store a part of the twitter profile information in the session as an example. You could do something
         //more useful here - like loading or setting up an account (social signup).
-        request.cookieAuth.set(request.auth.credentials);
+        const profile = request.auth.credentials.profile;
+
+        request.cookieAuth.set({
+          twitterId: profile.id,
+          username: profile.username,
+          displayName: profile.displayName
+        });
 
         return reply.redirect('/');
       }
@@ -57,7 +63,7 @@ server.register([require('hapi-auth-cookie'), require('bell')], function(err) {
       handler: function(request, reply) {
 
         //Return a message using the information from the session
-        return reply('Hello, ' + request.auth.credentials.profile.displayName + '!');
+        return reply('Hello, ' + request.auth.credentials.displayName + '!');
       }
     }
   });
